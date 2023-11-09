@@ -43,6 +43,30 @@ descriptive_stats <- function(data) {
 }
 ```
 
+## Figure
+
+```{r}
+# metabolite_distribution_plot <-
+#     ggplot(lipidomics,
+#            aes(x = value)) +
+#     geom_histogram() +
+#     facet_wrap(vars(metabolite), scales = "free")
+# metabolite_distribution_plot
+
+#' Plot for basic distribution of metabolite data.
+#'
+#' @param data The lipidomics dataset.
+#'
+#' @return A ggplot2 graph.
+
+plot_distributions <- function(data) {
+  data %>%
+    ggplot2::ggplot(ggplot2::aes(x = value)) +
+    ggplot2::geom_histogram() +
+    ggplot2::facet_wrap(vars(metabolite), scales = "free")
+}
+```
+
 ```{r}
 # Code chunk
 ```
