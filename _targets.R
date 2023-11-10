@@ -67,8 +67,8 @@ list(
     command = plot_distributions(lipidomics)
   ),
   tar_quarto(
-    name = quarto_doc,
-    path = "doc/learning.qmd"
+    name = quarto_website,
+    path = "." #means the same folder as _targets.R is in
   ),
   tar_target(
     name = df_model_estimates,
