@@ -1,6 +1,9 @@
 ---
 title: "Draft Quarto document"
-author: "Your Name"
+author:  
+    - name: Nicole
+      affiliations:
+         - name: BBH
 format: html
 execute:
   echo: true
@@ -200,9 +203,11 @@ model_estimates %>%
 
 ```{r}
 model_estimates <- tar_read(df_model_estimates)
+model_estimates
 ```
 
-```{r, eval=FALSE}
+```{r plot_estimats_function}
+#| include: false
 # plot_estimates <- model_estimates %>% 
 #     ggplot(aes(
 #         x = estimate,
