@@ -37,56 +37,56 @@ tar_read(fig_metabolite_distribution)
 
 ## Building the model
 
-```{r}
+```{r, eval=FALSE}
 log_reg_specs <- logistic_reg() %>%
   set_engine("glm")
 log_reg_specs
 ```
 
-```{r}
+```{r,eval=FALSE}
 lipidomics_wide <- lipidomics %>%
   mutate(metabolite = snakecase::to_snake_case(metabolite)) %>%
   pivot_wider(names_from = metabolite, values_from = value, values_fn = mean, names_prefix = "metabolite_")
 lipidomics_wide
 ```
 
-```{r}
+```{r, eval=FALSE}
 lipidomics %>%
   column_values_to_snake_case()
 ```
 
-```{r}
+```{r, eval=FALSE}
 lipidomics %>%
   column_values_to_snake_case(metabolite) %>%
   metabolites_to_wider()
 ```
 
-```{r}
+```{r, eval=FALSE}
 recipe(class ~ metabolite_lipid_ch_3_1 + age + gender,
   data = lipidomics_wide
 )
 ```
 
-```{r}
+```{r, eval=FALSE}
 recipe(lipidomics_wide) %>%
   update_role(metabolite_lipid_ch_3_1, age, gender, new_role = "predictor") %>%
   update_role(class, new_role = "outcome") %>%
   step_normalize(starts_with("metabolite_"))
 ```
 
-```{r}
+```{r, eval=FALSE}
 recipe_specs <- lipidomics_wide %>%
   create_recipe_spec(metabolite_lipid_ch_3_1)
 recipe_specs
 ```
 
-```{r}
+```{r, eval=FALSE}
 workflow() %>%
   add_model(log_reg_specs) %>%
   add_recipe(recipe_specs)
 ```
 
-```{r}
+```{r, eval=FALSE}
 model_workflow <- create_model_workflow(
   logistic_reg() %>%
     set_engine("glm"),
@@ -96,24 +96,24 @@ model_workflow <- create_model_workflow(
 model_workflow
 ```
 
-```{r}
+```{r, eval=FALSE}
 fitted_model <- model_workflow %>%
   fit(lipidomics_wide)
 fitted_model
 ```
 
-```{r}
+```{r, eval=FALSE}
 fitted_model %>%
   extract_fit_parsnip() %>%
   tidy(exponentiate = TRUE)
 ```
 
-```{r}
+```{r, eval=FALSE}
 fitted_model %>%
   tidy_model_output()
 ```
 
-```{r}
+```{r, eval=FALSE}
 create_model_workflow(
   logistic_reg() %>%
     set_engine("glm"),
@@ -196,6 +196,45 @@ model_estimates %>%
 
 ```
 
-```{r}
+## Figure of model estimates
 
+```{r}
+model_estimates <- tar_read(df_model_estimates)
+```
+
+```{r, eval=FALSE}
+# plot_estimates <- model_estimates %>% 
+#     ggplot(aes(
+#         x = estimate,
+#         y = metabolite,
+#         xmin = estimate - std.error,
+#         xmax = estimate + std.error
+#     )) +
+#     geom_pointrange()
+# 
+# plot_estimates + coord_fixed(xlim = c(0,5))
+# 
+# 
+# 
+# #' Plot the estimates and standard errors of the model results.
+# #'
+# #' @param results The model estimate results.
+# #'
+# #' @return A ggplot2 figure.
+# #' 
+# plot_estimates <- function(results) {
+#   results %>% 
+#     ggplot2::ggplot(aes(
+#         x = estimate,
+#         y = metabolite,
+#         xmin = estimate - std.error,
+#         xmax = estimate + std.error
+#     )) +
+#     ggplot2::geom_pointrange() +
+#         ggplot2::coord_fixed(xlim = c(0,5))
+# }
+```
+
+```{r}
+tar_read(fig_model_estimates)
 ```
